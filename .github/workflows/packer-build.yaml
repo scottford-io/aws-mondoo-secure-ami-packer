@@ -1,4 +1,4 @@
-name: mondoo-scan
+name: AWS Secure AMI 
 
 on:
   pull_request:
