@@ -31,11 +31,16 @@ jobs:
             echo ${{ secrets.MONDOO_CLIENT_ACCOUNT }} | base64 -d > mondoo.json
             curl -sSL https://mondoo.com/install.sh | bash
 
+      # Set MONDOO_CONFIG_PATH
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "MONDOO_CONFIG_PATH=mondoo.json" >> $GITHUB_ENV
+
       # Mondoo status
       - name: Run Mondoo status
         shell: bash
         run: |
-          export MONDOO_CONFIG_PATH=mondoo.json
           mondoo status
         env:
           MONDOO_CONFIG_PATH: mondoo.json
