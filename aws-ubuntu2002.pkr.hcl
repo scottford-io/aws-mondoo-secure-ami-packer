@@ -17,6 +17,10 @@ variable "aws_profile" {
   default = "default"
 }
 
+variable "access_key" {}
+
+variable "secret_key" {}
+
 variable "aws_region" {
   default = "us-east-1"
   type    = string
@@ -31,7 +35,8 @@ variable "image_prefix" {
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
 source "amazon-ebs" "ubuntu2004" {
-  profile       = var.aws_profile
+  access_key    = var.access_key
+  secret_key    = var.secret_key
   ami_name      = "${var.image_prefix}-${local.timestamp}"
   instance_type = "t2.micro"
   region        = var.aws_region
