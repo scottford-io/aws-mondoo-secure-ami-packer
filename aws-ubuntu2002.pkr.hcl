@@ -11,12 +11,6 @@ packer {
   }
 }
 
-variable "aws_profile" {
-  type = string
-  description = "AWS profile to use. Typically found in ~/.aws/credentials"
-  default = "default"
-}
-
 variable "access_key" {}
 
 variable "secret_key" {}
