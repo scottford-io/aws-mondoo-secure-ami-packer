@@ -34,7 +34,7 @@ jobs:
       # Mondoo status
       - name: Run Mondoo status
         shell: bash
-        run: mondoo status
+        run: mondoo status --config mondoo.json
         env:
           MONDOO_CONFIG_PATH: mondoo.json
 
