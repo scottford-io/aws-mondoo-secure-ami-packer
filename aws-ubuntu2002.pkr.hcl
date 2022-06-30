@@ -47,7 +47,7 @@ source "amazon-ebs" "ubuntu2004" {
 }
 
 build {
-  name = "${var.image_prefix}-${local.timestamp}"
+  name = "mondoo-ubuntu-2004-secure-base"
 
   sources = [
     "source.amazon-ebs.ubuntu2004"
