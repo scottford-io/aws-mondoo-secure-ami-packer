@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
             echo Installing Mondoo Client...
-            echo ${{ secrets.MONDOO_CLIENT_ACCOUNT }} | base64 -d > mondoo.json
+            echo ${{ secrets.MONDOO_CLIENT_ACCOUNT }} | base64 -d > /etc/opt/mondoo/mondoo.json
             curl -sSL https://mondoo.com/install.sh | bash
 
       # Set MONDOO_CONFIG_PATH
@@ -41,6 +41,9 @@ jobs:
       - name: Run Mondoo status
         shell: bash
         run: |
+          echo $MONDOO_CONFIG_PATH
+          echo $MONDOO_CLIENT_ACCOUNT
+          cat $MONDOO_CONFIG_PATH
           mondoo status
         env:
           MONDOO_CONFIG_PATH: mondoo.json
@@ -60,13 +63,13 @@ jobs:
           target: aws-ubuntu2002.pkr.hcl
 
       # build artifact
-      - name: Build Artifact
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: build
-          arguments: "-color=false -on-error=abort"
-          target: aws-ubuntu2002.pkr.hcl
-        env:
-          PACKER_LOG: 1
+      # - name: Build Artifact
+      #   uses: hashicorp/packer-github-actions@master
+      #   with:
+      #     command: build
+      #     arguments: "-color=false -on-error=abort"
+      #     target: aws-ubuntu2002.pkr.hcl
+      #   env:
+      #     PACKER_LOG: 1
 
       
