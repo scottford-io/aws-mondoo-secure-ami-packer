@@ -35,6 +35,8 @@ jobs:
       - name: Run Mondoo status
         shell: bash
         run: mondoo status
+        env:
+          MONDOO_CONFIG_PATH: mondoo.json
 
       # Initialize Packer templates
       - name: Initialize Packer Template
