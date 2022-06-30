@@ -23,6 +23,10 @@ jobs:
           # if you have/need it
           aws-region: us-east-1
 
+      # Setup Mondoo
+      - name: Install Mondoo
+        run:  bash -c "$(curl -sSL https://install.mondoo.com/sh)"
+
       # Initialize Packer templates
       - name: Initialize Packer Template
         uses: hashicorp/packer-github-actions@master
