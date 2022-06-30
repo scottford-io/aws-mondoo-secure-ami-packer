@@ -32,10 +32,10 @@ jobs:
             curl -sSL https://mondoo.com/install.sh | bash
 
       # Set MONDOO_CONFIG_PATH
-      - name: Set the value
-        id: step_one
+      - name: Configure MONDOO_CONFIG_PATH
         run: |
           echo "MONDOO_CONFIG_PATH=mondoo.json" >> $GITHUB_ENV
+          echo "MONDOO_CLIENT_ACCOUNT=mondoo.json" >> $GITHUB_ENV
 
       # Mondoo status
       - name: Run Mondoo status
