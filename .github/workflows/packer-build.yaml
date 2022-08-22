@@ -5,7 +5,6 @@ on:
 
 env:
   MONDOO_CONFIG_PATH: mondoo.json
-  PATH: $PATH:/usr/bin/mondoo
 
 jobs:
   packer-build-and-test:
@@ -52,7 +51,7 @@ jobs:
         shell: bash
         run: |
           which mondoo
-          echo $PATH
+          export PATH="$PATH:/usr/bin/mondoo"
 
       # build artifact
       - name: Build Artifact
