@@ -2,11 +2,9 @@ name: Packer AMI Build and Scan
 
 on:
   push:
-    paths:
-    - 'aws-ubuntu2002.pkr.hcl' 
 
 env:
-  MONDOO_CONFIG_PATH = 'mondoo.json'
+  MONDOO_CONFIG_PATH: mondoo.json
 
 jobs:
   packer-build-and-test:
