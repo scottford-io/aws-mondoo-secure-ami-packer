@@ -1,15 +1,16 @@
 packer {
   required_plugins {
     amazon = {
-      version = ">= 1.1.0"
+      version = ">= 1.2.0"
       source  = "github.com/hashicorp/amazon"
     }
-    mondoo = {
-      version = ">= 0.5.1"
-      source  = "github.com/mondoohq/mondoo"
+    cnspec = {
+      version = ">= 9.0.0"
+      source  = "github.com/mondoohq/cnspec"
     }
   }
 }
+
 
 variable "aws_region" {
   default = "us-east-1"
@@ -79,15 +80,16 @@ build {
       "sudo chmod u-x,g-wx,o-rwx /etc/shadow-",
       "sudo chown root:root /etc/gshadow-",
       "sudo chown root:root /etc/shadow",
-      "sudo chown root:root /etc/shadow-"
-      ,
+      "sudo chown root:root /etc/shadow-",
     ]
   }
 
-  provisioner "mondoo" {
+  provisioner "cnspec" {
     on_failure = "continue"
     asset_name = "${var.image_prefix}-${local.timestamp}"
-
+    sudo {
+      active = true
+    }
     annotations = {
       Name          = "${var.image_prefix}-${local.timestamp}"
       Base_AMI_Name = "{{ .SourceAMIName }}"

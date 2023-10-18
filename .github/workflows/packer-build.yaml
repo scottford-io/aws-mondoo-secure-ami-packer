@@ -4,7 +4,8 @@ on:
   push:
 
 env:
-  MONDOO_CONFIG_PATH: mondoo.json
+  PRODUCT_VERSION: "1.8.6" # or: "latest"
+  MONDOO_CONFIG_BASE64: ${{ secrets.MONDOO_CONFIG_BASE64 }}
 
 jobs:
   packer-build-and-test:
@@ -13,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -24,45 +25,21 @@ jobs:
           # if you have/need it
           aws-region: us-east-1
 
-      # Setup Mondoo
-      - name: Install Mondoo Client
-        shell: bash
-        run: |
-            echo Installing Mondoo Client...
-            echo ${{ secrets.MONDOO_SERVICE_ACCOUNT }} | base64 -d > mondoo.json
-            curl -sSL https://mondoo.com/install.sh | bash
-            mondoo status --config ${{ env.MONDOO_CONFIG_PATH }}
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
 
-      # Initialize Packer templates
       - name: Initialize Packer Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: init
+        id: init
+        run: packer init ./aws-ubuntu2002.pkr.hcl
 
-      # validate templates
-      - name: Validate Template
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          arguments: -syntax-only
-          target: aws-ubuntu2002.pkr.hcl
+      - name: Validate Packer Template
+        id: validate
+        run: packer validate ./aws-ubuntu2002.pkr.hcl
 
-      - name: Test Mondoo Path 
-        shell: bash
-        run: |
-          which mondoo
-          export PATH="$PATH:/usr/bin/mondoo"
-
-      # build artifact
-      - name: Build Artifact
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: build
-          arguments: "-color=false -on-error=abort"
-          target: aws-ubuntu2002.pkr.hcl
-        env:
-          PACKER_LOG: 1
-          HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
-          HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+      - name: Build Packer AMI
+        run: packer build -color=false -on-error=abort ./aws-ubuntu2002.pkr.hcl
 
       
