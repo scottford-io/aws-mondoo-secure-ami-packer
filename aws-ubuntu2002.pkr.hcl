@@ -44,6 +44,7 @@ source "amazon-ebs" "ubuntu2004" {
     Name          = "${var.image_prefix}-${local.timestamp}"
     Source_AMI    = "{{ .SourceAMI }}"
     Creation_Date = "{{ .SourceAMICreationDate }}"
+    GitRepo       = "https://github.com/scottford-io/aws-mondoo-secure-ami-packer"
   }
 }
 
@@ -92,8 +93,7 @@ build {
     }
     annotations = {
       Name          = "${var.image_prefix}-${local.timestamp}"
-      Base_AMI_Name = "{{ .SourceAMIName }}"
-      Source_AMI    = "{{ .SourceAMI }}"
+      GitRepo       = "https://github.com/scottford-io/aws-mondoo-secure-ami-packer"
       Creation_Date = "{{ .SourceAMICreationDate }}"
     }
   }
